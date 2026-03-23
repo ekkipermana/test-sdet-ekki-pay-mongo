@@ -37,7 +37,7 @@ jobs:
 
       - name: Install application dependencies
         working-directory: application_code
-        run: npm ci
+        run: npm install
 
       - name: Install Playwright dependencies
         working-directory: playwright_template
