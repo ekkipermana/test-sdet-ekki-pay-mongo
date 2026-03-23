@@ -55,6 +55,31 @@ Paymongo/
 
 ---
 
+## High-Level Flow
+
+```mermaid
+flowchart TD
+    A[Application source] --> B[Swagger/OpenAPI]
+    A --> C[React page source]
+
+    B --> D[LLM API test generation]
+    C --> E[LLM E2E test generation with constraints and validation]
+
+    D --> F[tests/api/generated.spec.ts]
+    E --> G[tests/web/generated-web.spec.ts]
+
+    F --> H[Playwright API run]
+    G --> I[Playwright Web run]
+
+    H --> J{Tests pass?}
+    I --> J
+
+    J -- Yes --> K[GitHub Actions quality gate passes]
+    J -- No --> L[CI fails or PR is blocked]
+```
+
+---
+
 ## Assessment Interpretation
 
 The assessment asks for:
@@ -120,10 +145,10 @@ I initially explored more free-form LLM generation for both API and E2E tests.
 
 That worked well for API generation because Swagger is structured input.
 
-For E2E generation, raw LLM output produced unstable selectors and brittle assertions, such as:
+For E2E generation, raw LLM output produced unstable selectors and brittle UI assertions, such as:
 - `getByLabel()` on labels that were not accessibility-bound
 - validation-message assertions that were not stable in the DOM
-- assumptions copied from sample tests instead of the real implementation
+- assumptions taken from sample tests instead of the real implementation
 
 To make E2E generation reliable while still keeping it LLM-based, I constrained the LLM output and added post-generation validation.
 
