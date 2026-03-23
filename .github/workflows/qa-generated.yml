@@ -1,0 +1,12 @@
+## CI
+
+The repository includes a GitHub Actions workflow at:
+
+`.github/workflows/qa-generated.yml`
+
+It:
+1. installs app and Playwright dependencies
+2. starts backend and frontend
+3. waits for local services to become ready
+4. runs `npm run qa:generated`
+5. uploads Playwright reports and logs as artifacts
